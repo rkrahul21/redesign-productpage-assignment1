@@ -5,10 +5,10 @@ import HcfSignupPopup from '@/components/shared/Popups/HcfSignupPopup';
 import { IoVolumeMuteOutline, IoVolumeHighOutline } from 'react-icons/io5';
 
 interface HeroSectionProps {
-    scrollToSection: (ref: React.RefObject<HTMLElement>) => void;
-    featuresRef: React.RefObject<HTMLElement>;
-    contactRef: React.RefObject<HTMLElement>;
-    aboutRef: React.RefObject<HTMLElement>;
+    scrollToSection: (ref: React.RefObject<HTMLDivElement>) => void;
+    featuresRef: React.RefObject<HTMLDivElement>;
+    contactRef: React.RefObject<HTMLDivElement>;
+    aboutRef: React.RefObject<HTMLDivElement>;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({

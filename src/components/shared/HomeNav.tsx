@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 interface HomeNavProps {
-    scrollToSection: (ref: React.RefObject<HTMLElement>) => void;
-    featuresRef: React.RefObject<HTMLElement>;
-    contactRef: React.RefObject<HTMLElement>;
-    aboutRef: React.RefObject<HTMLElement>;
+    scrollToSection: (ref: React.RefObject<HTMLDivElement>) => void;
+    featuresRef: React.RefObject<HTMLDivElement>;
+    contactRef: React.RefObject<HTMLDivElement>;
+    aboutRef: React.RefObject<HTMLDivElement>;
 }
 
 const HomeNav: React.FC<HomeNavProps> = ({
@@ -16,7 +16,7 @@ const HomeNav: React.FC<HomeNavProps> = ({
 }) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const handleNavItemClick = (ref: React.RefObject<HTMLElement>) => {
+    const handleNavItemClick = (ref: React.RefObject<HTMLDivElement>) => {
         scrollToSection(ref);
         setIsMobileMenuOpen(false);
     };
@@ -31,20 +31,20 @@ const HomeNav: React.FC<HomeNavProps> = ({
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex space-x-4">
                     <button
-                        onClick={() => scrollToSection(aboutRef)}
                         className="text-white hover:text-primary transition-colors font-medium"
+                        onClick={() => scrollToSection(aboutRef)}
                     >
                         About
                     </button>
                     <button
-                        onClick={() => scrollToSection(featuresRef)}
                         className="text-white hover:text-primary transition-colors font-medium"
+                        onClick={() => scrollToSection(featuresRef)}
                     >
                         Features
                     </button>
                     <button
-                        onClick={() => scrollToSection(contactRef)}
                         className="text-white hover:text-primary transition-colors font-medium"
+                        onClick={() => scrollToSection(contactRef)}
                     >
                         Contact
                     </button>

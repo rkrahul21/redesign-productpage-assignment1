@@ -5,14 +5,14 @@ import ContactForm from './components/ContactForm';
 import InfoSection from './components/InfoSection';
 import FeaturesGrid from './components/FeaturesGrid';
 import SocialProofSection from './components/SocialProofSection';
-import MainFooter from './components/MainFooter';
+// import MainFooter from './components/MainFooter';
 
-const Home: React.FC = () => {
-	const contactRef = useRef(null);
-	const aboutRef = useRef(null);
-	const FqRef = useRef(null);
-	const scrollToSection = (ref:any) => {
-		ref.current.scrollIntoView({ behavior: 'smooth' });
+const Home = (): JSX.Element => {
+	const contactRef = useRef<HTMLDivElement>(null);
+	const aboutRef = useRef<HTMLDivElement>(null);
+	const FqRef = useRef<HTMLDivElement>(null);
+	const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
+		ref.current?.scrollIntoView({ behavior: 'smooth' });
 	};
 
 	useEffect(() => {

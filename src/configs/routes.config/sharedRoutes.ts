@@ -9,7 +9,7 @@ const sharedRoutes: Routes = [
         authority: [],
         exact:true,
     },
-    // Add more shared routes here
+    
 ]
 
 export default sharedRoutes

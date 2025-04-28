@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { BiCreditCard, BiGlobeAlt, BiMessageSquare, BiSearch, BiTrendingUp } from 'react-icons/bi';
 import { BsDatabase } from 'react-icons/bs';
 import { FaUserSecret } from 'react-icons/fa';
 import { FiFileText } from 'react-icons/fi';
 import { LuLanguages } from 'react-icons/lu';
+import { motion, useAnimation, useInView } from 'framer-motion';
 
 const solutions = [
   {
@@ -63,39 +64,102 @@ const solutions = [
 ];
 
 const FeaturesGrid: React.FC = () => {
+  const controls = useAnimation();
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    }
+  }, [isInView, controls]);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { 
+      opacity: 0,
+      y: 50,
+      scale: 0.8
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15
+      }
+    }
+  };
+
   return (
-    <div className="py-16 px-4 md:px-8 bg-gray-50">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
+    <div className="py-16 px-4 md:px-8 bg-gray-50 relative">
+      {/* Shadow effect */}
+      <div className="absolute inset-0 shadow-[0_0_50px_-12px_rgba(0,0,0,0.25)] rounded-3xl"></div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Our Comprehensive Solutions
           </h2>
-          <div className="h-1 w-24 bg-primary mx-auto rounded-full"></div>
-        </div>
+          <div className="h-1 w-24 bg-amber-300 mx-auto rounded-full"></div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {solutions.map((solution, index) => {
-            return (
-              <div
-                key={index}
-                className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl"
-              >
-                <div className="p-6">
-                  <div className={`${solution.color} inline-flex p-3 rounded-lg text-white mb-4`}>
-                    {solution.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                    {solution.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {solution.description}
-                  </p>
-                </div>
-                <div className={`h-1 w-full absolute bottom-0 ${solution.color} opacity-75`}></div>
+        <motion.div
+          ref={ref}
+          variants={containerVariants}
+          initial="hidden"
+          animate={controls}
+          className="md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 h-[80vh] md:h-auto overflow-y-auto scrollbar-hide"
+        >
+          {solutions.map((solution, index) => (
+            <motion.div
+              key={index}
+              variants={itemVariants}
+              className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl mb-8 md:mb-0"
+            >
+              <div className="p-6">
+                <motion.div 
+                  className={`${solution.color} inline-flex p-3 rounded-lg text-white mb-4`}
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  {solution.icon}
+                </motion.div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  {solution.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {solution.description}
+                </p>
               </div>
-            );
-          })}
-        </div>
+              <motion.div 
+                className={`h-1 w-full absolute bottom-0 ${solution.color} opacity-75`}
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </div>
   );

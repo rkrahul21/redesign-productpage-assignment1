@@ -4,29 +4,31 @@ import { BiPhone, BiSend, BiUser } from 'react-icons/bi';
 import { BsLinkedin, BsTwitter } from 'react-icons/bs';
 import { CgMail } from 'react-icons/cg';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+
+interface FormState {
+    fullname: string;
+    email: string;
+    subject: string;
+    message: string;
+}
 
 const ContactForm = () => {
-    const [formState, setFormState] = useState<{
-        fullname: string;
-        email: string;
-        subject: string;
-        message: string
-    }>({
+    const [formState, setFormState] = useState<FormState>({
         fullname: '',
         email: '',
         subject: '',
         message: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-
     const [focused, setFocused] = useState('');
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            setIsSubmitting(true)
+            setIsSubmitting(true);
             // await apiContactUs(formState)
-            setIsSubmitting(false)
+            setIsSubmitting(false);
             toast.push(
                 <Notification
                     title={'Success'}
@@ -34,27 +36,27 @@ const ContactForm = () => {
                 >
                     Successfully submitted
                 </Notification>,
-            )
+            );
             setFormState({
                 fullname: '',
                 email: '',
                 subject: '',
                 message: ''
-            })
-        } catch (err) {
-            setIsSubmitting(false)
+            });
+        } catch (err: unknown) {
+            setIsSubmitting(false);
             toast.push(
                 <Notification
-                    title={err?.response?.data.message}
+                    title={err instanceof Error ? err.message : 'Error'}
                     type={'danger'}
                 >
-                    {err?.response?.data.message}
+                    {(err as any)?.response?.data?.message || 'Something went wrong'}
                 </Notification>,
-            )
+            );
         }
     };
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormState({
             ...formState,
             [e.target.name]: e.target.value
@@ -62,39 +64,53 @@ const ContactForm = () => {
     };
 
     return (
-        <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    {/* Left Column - Contact Info */}
-                    <div className="space-y-8">
-                        <div>
-                            <h2 className="text-4xl font-bold text-gray-900 mb-4">Let's get in touch!</h2>
-                            <p className="text-gray-600 text-lg">
-                                Got questions about GoGetWell.AI? Our team is here to help. Contact us for quick and friendly support.
-                            </p>
-                        </div>
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                    className="text-center mb-12"
+                >
+                    <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                        Let&apos;s get in touch!
+                    </h2>
+                    <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                        Got questions about GoGetWell.AI? Our team is here to help. Contact us for quick and friendly support.
+                    </p>
+                </motion.div>
 
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    {/* Left Column - Contact Info */}
+                    <motion.div 
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="space-y-8 bg-white rounded-2xl p-8 shadow-lg"
+                    >
                         <div className="space-y-6">
                             {/* Contact Details */}
-                            <div className="flex items-center space-x-4">
-                                <div className="bg-purple-100 p-3 rounded-lg">
-                                    <BiPhone className="w-6 h-6 text-primary" />
+                            <div className="flex items-center space-x-4 p-4 rounded-xl hover:bg-gray-50 transition-colors">
+                                <div className="bg-blue-100 p-3 rounded-lg">
+                                    <BiPhone className="w-6 h-6 text-blue-600" />
                                 </div>
                                 <div>
-                                    <p className="text-gray-600">Phone</p>
-                                    <a href="tel:+919811396858" className="text-gray-900 hover:text-primary transition-colors">
+                                    <p className="text-gray-600 text-sm">Phone</p>
+                                    <a href="tel:+919811396858" className="text-gray-900 hover:text-blue-600 transition-colors text-lg font-medium">
                                         +91 9811396858
                                     </a>
                                 </div>
                             </div>
 
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-4 p-4 rounded-xl hover:bg-gray-50 transition-colors">
                                 <div className="bg-purple-100 p-3 rounded-lg">
-                                    <CgMail className="w-6 h-6 text-primary" />
+                                    <CgMail className="w-6 h-6 text-purple-600" />
                                 </div>
                                 <div>
-                                    <p className="text-gray-600">Email</p>
-                                    <a href="mailto:hello@gogetwell.ai" className="text-gray-900 hover:text-primary transition-colors">
+                                    <p className="text-gray-600 text-sm">Email</p>
+                                    <a href="mailto:hello@gogetwell.ai" className="text-gray-900 hover:text-purple-600 transition-colors text-lg font-medium">
                                         hello@gogetwell.ai
                                     </a>
                                 </div>
@@ -102,25 +118,38 @@ const ContactForm = () => {
                         </div>
 
                         {/* Social Links */}
-                        <div>
+                        <div className="pt-6 border-t border-gray-200">
                             <h3 className="text-xl font-semibold text-gray-900 mb-4">Connect With Us</h3>
                             <div className="flex space-x-4">
-                                <Link to="https://x.com/gogetwellai" target='_blank' className="bg-purple-100 p-3 rounded-lg hover:bg-purple-200 transition-colors">
-                                    <BsTwitter className="w-6 h-6 text-primary" />
+                                <Link 
+                                    to="https://x.com/gogetwellai" 
+                                    target='_blank' 
+                                    className="bg-blue-100 p-3 rounded-lg hover:bg-blue-200 transition-colors"
+                                >
+                                    <BsTwitter className="w-6 h-6 text-blue-600" />
                                 </Link>
-                                <Link to="https://www.linkedin.com/company/gogetwellai/" target='_blank' className="bg-purple-100 p-3 rounded-lg hover:bg-purple-200 transition-colors">
-                                    <BsLinkedin className="w-6 h-6 text-primary" />
+                                <Link 
+                                    to="https://www.linkedin.com/company/gogetwellai/" 
+                                    target='_blank' 
+                                    className="bg-blue-100 p-3 rounded-lg hover:bg-blue-200 transition-colors"
+                                >
+                                    <BsLinkedin className="w-6 h-6 text-blue-600" />
                                 </Link>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* Right Column - Contact Form */}
-                    <div className="bg-gray-50 rounded-2xl shadow-lg p-4 sm:p-8">
-                        <form onSubmit={handleSubmit} className="space-y-3">
+                    <motion.div 
+                        initial={{ opacity: 0, x: 20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="bg-white rounded-2xl shadow-lg p-6 sm:p-8"
+                    >
+                        <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="relative">
-                                <div className={`absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-300 ${focused === 'fullName' || formState.fullname ? 'text-primary' : 'text-gray-400'
-                                    }`}>
+                                <div className={`absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-300 ${focused === 'fullname' || formState.fullname ? 'text-blue-600' : 'text-gray-400'}`}>
                                     <BiUser className="w-5 h-5" />
                                 </div>
                                 <input
@@ -131,14 +160,13 @@ const ContactForm = () => {
                                     onChange={handleChange}
                                     onFocus={() => setFocused('fullname')}
                                     onBlur={() => setFocused('')}
-                                    className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                                     required
                                 />
                             </div>
 
                             <div className="relative">
-                                <div className={`absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-300 ${focused === 'email' || formState.email ? 'text-primary' : 'text-gray-400'
-                                    }`}>
+                                <div className={`absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-300 ${focused === 'email' || formState.email ? 'text-blue-600' : 'text-gray-400'}`}>
                                     <CgMail className="w-5 h-5" />
                                 </div>
                                 <input
@@ -149,39 +177,21 @@ const ContactForm = () => {
                                     onChange={handleChange}
                                     onFocus={() => setFocused('email')}
                                     onBlur={() => setFocused('')}
-                                    className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                                     required
                                 />
                             </div>
 
-                            {/* <div className="relative">
-                                <div className={`absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-300 ${focused === 'subject' || formState.subject ? 'text-primary' : 'text-gray-400'
-                                    }`}>
-                                    <BiMessageSquare className="w-5 h-5" />
-                                </div>
-                                <input
-                                    type="text"
-                                    name="subject"
-                                    placeholder="Subject"
-                                    value={formState.subject}
-                                    onChange={handleChange}
-                                    onFocus={() => setFocused('subject')}
-                                    onBlur={() => setFocused('')}
-                                    className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
-                                    required
-                                />
-                            </div> */}
-
                             <div className="relative">
                                 <textarea
                                     name="message"
-                                    placeholder="Message"
+                                    placeholder="Your Message"
                                     value={formState.message}
                                     onChange={handleChange}
                                     onFocus={() => setFocused('message')}
                                     onBlur={() => setFocused('')}
                                     rows={4}
-                                    className="w-full p-4 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                                     required
                                 />
                             </div>
@@ -189,13 +199,13 @@ const ContactForm = () => {
                             <Button
                                 loading={isSubmitting}
                                 type="submit"
-                                className="w-full bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-transparent transition-colors duration-300 flex items-center justify-center space-x-2 shadow-md hover:shadow-lg"
+                                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:opacity-90 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl"
                             >
-                                <span>Submit</span>
+                                <span>Send Message</span>
                                 <BiSend className="w-5 h-5" />
                             </Button>
                         </form>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </div>

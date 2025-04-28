@@ -2,15 +2,16 @@ import React, { useEffect, useRef } from 'react';
 import HeroSection from './components/HeroSection';
 import HomeFAQs from './components/HomeFAQ';
 import ContactForm from './components/ContactForm';
-import MainFooter from './components/MainFooter';
 import InfoSection from './components/InfoSection';
 import FeaturesGrid from './components/FeaturesGrid';
+import SocialProofSection from './components/SocialProofSection';
+import MainFooter from './components/MainFooter';
 
 const Home: React.FC = () => {
 	const contactRef = useRef(null);
 	const aboutRef = useRef(null);
 	const FqRef = useRef(null);
-	const scrollToSection = (ref) => {
+	const scrollToSection = (ref:any) => {
 		ref.current.scrollIntoView({ behavior: 'smooth' });
 	};
 
@@ -60,14 +61,17 @@ const Home: React.FC = () => {
 					<div className='!bg-[#eff6ff] relative'>
 						<FeaturesGrid />
 					</div>
-					<div className='!bg-white relative' ref={aboutRef}>
+					<div ref={aboutRef} className='!bg-white relative'>
 						<InfoSection />
 					</div>
-					<div className='relative bg-white' ref={FqRef}>
+					<div ref={FqRef} className='relative bg-white'>
 						<HomeFAQs />
 					</div>
-					<div className='bg-white relative' ref={contactRef}>
+					<div ref={contactRef} className='bg-white relative'>
 						<ContactForm />
+					</div>
+					<div className='bg-white relative'>
+						<SocialProofSection />
 					</div>
 					{/* <div className='bg-white'>
 						<MainFooter />

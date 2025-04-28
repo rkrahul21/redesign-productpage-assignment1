@@ -1,8 +1,9 @@
 import { Suspense } from 'react'
 import Container from '@/components/shared/Container'
-import Footer from '@/components/template/Footer'
+// import Footer from "@/components/template/Footer"
+import MainFooter from '@/views/Home/components/MainFooter'
 import useLayout from '@/utils/hooks/useLayout'
-import classNames from '@/utils/classNames'
+import classNames from '@/utils/classNames' 
 import {
     PAGE_CONTAINER_GUTTER_X,
     PAGE_CONTAINER_GUTTER_Y,
@@ -108,7 +109,7 @@ export const PageContainerFooter = ({
     if (!footer) return null
 
     return (
-        <Footer className={className} pageContainerType={pageContainerType} />
+        <MainFooter className={className} pageContainerType={pageContainerType} />
     )
 }
 

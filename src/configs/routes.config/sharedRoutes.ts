@@ -1,38 +1,15 @@
 import { lazy } from 'react'
 import type { Routes } from '@/@types/routes'
-import { ADMIN, USER } from '@/constants/roles.constant'
 
 const sharedRoutes: Routes = [
     {
-        key: 'home',
+        key: 'homePage',
         path: '/',
         component: lazy(() => import('@/views/Home')),
-        authority: [ADMIN, USER],
-        meta: {
-            pageContainerType: 'contained',
-            pageBackgroundType: 'plain',
-        },
+        authority: [],
+        exact:true,
     },
-    {
-        key: 'about',
-        path: '/about',
-        component: lazy(() => import('@/views/About')),
-        authority: [ADMIN, USER],
-        meta: {
-            pageContainerType: 'contained',
-            pageBackgroundType: 'plain',
-        },
-    },
-    {
-        key: 'contact',
-        path: '/contact',
-        component: lazy(() => import('@/views/Contact')),
-        authority: [ADMIN, USER],
-        meta: {
-            pageContainerType: 'contained',
-            pageBackgroundType: 'plain',
-        },
-    },
+    // Add more shared routes here
 ]
 
 export default sharedRoutes
